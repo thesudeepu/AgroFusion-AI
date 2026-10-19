@@ -368,7 +368,7 @@ def weather():
         return jsonify({"error": "Could not get weather. Check your internet connection."}), 502
 
 
-# ================== AI CHAT API (FAST) ==================
+# ================== AI CHAT API ==================
 def call_gemini(payload):
     global WORKING_MODEL
 
@@ -390,7 +390,7 @@ def call_gemini(payload):
                         "Content-Type": "application/json"
                     },
                     json=payload,
-                    timeout=25
+                    timeout=28
                 )
             except requests.RequestException:
                 time.sleep(0.4)
@@ -438,14 +438,20 @@ def chat():
             })
 
         system_text = SYSTEM_PROMPT + " Current date and time: " + current_time_text()
-        system_text += " Keep answers short and clear (under 120 words) unless the user asks for details."
+        # Give complete, detailed answers (the old 120-word limit cut answers short)
+        system_text += (
+            " Give complete, detailed, step-by-step answers and always finish every point."
+            " Use simple plain text with numbered points."
+            " Do not use markdown symbols such as ** or # in the reply."
+        )
         if lang in LANG_NAMES:
             system_text += " Reply in " + LANG_NAMES[lang] + "."
 
         payload = {
             "system_instruction": {"parts": [{"text": system_text}]},
             "contents": contents,
-            "generationConfig": {"maxOutputTokens": 700}
+            # Kannada text uses many tokens, so the limit must be large
+            "generationConfig": {"maxOutputTokens": 4096}
         }
 
         last_user_text = msgs[-1].get("content", "") if msgs else ""
