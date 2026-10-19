@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroFusion AI - Sign Up</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+*{box-sizing:border-box}
+body{margin:0;font-family:"Manrope","Segoe UI",system-ui,sans-serif;color:#e8f1ee;background:#070b0f;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+ background:radial-gradient(900px 480px at 8% -8%,rgba(52,214,160,.22),transparent 60%),radial-gradient(700px 460px at 100% 8%,rgba(120,80,255,.15),transparent 60%),radial-gradient(600px 400px at 50% 110%,rgba(60,199,232,.10),transparent 60%),#070b0f}
+.page{display:flex;min-height:100vh}
+.hero{width:52%;padding:55px 7%;display:flex;flex-direction:column;justify-content:center}
+.brand{font-size:clamp(28px,3vw,40px);font-weight:800;margin-bottom:10px;color:#fff}
+.tagline{font-size:15px;color:#9bb0aa}
+.hero h2{font-size:clamp(26px,3vw,40px);line-height:1.25;margin:50px 0 0;font-weight:800;background:linear-gradient(90deg,#3cc7e8,#34d6a0,#f0a070);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:16px;line-height:1.8;color:#9bb0aa}
+.features{margin-top:22px;line-height:2.5;font-size:15px;color:#cfe0da}
+.form-side{width:48%;display:flex;justify-content:center;align-items:center;padding:35px 24px}
+.card{position:relative;width:100%;max-width:480px;padding:40px;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.09);
+ background:linear-gradient(165deg,rgba(52,214,160,.09),rgba(255,255,255,.025));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+ box-shadow:0 30px 80px -30px #000;animation:rise .6s both}
+.card::before{content:"";position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,#34d6a0,transparent);box-shadow:0 0 14px rgba(52,214,160,.7)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.logo{font-size:44px;text-align:center}
+h1{text-align:center;margin:10px 0;font-size:28px;font-weight:800;color:#fff}
+.subtitle{text-align:center;color:#9bb0aa;margin:0 0 26px}
+label{display:block;margin:16px 0 7px;font-weight:600;font-size:13.5px;color:#9bb0aa}
+input{width:100%;padding:14px;border:1px solid rgba(255,255,255,.1);border-radius:12px;font-size:15px;font-family:inherit;color:#fff;background:rgba(0,0,0,.35)}
+input::placeholder{color:#6f8680}
+input:focus{outline:none;border-color:#34d6a0;box-shadow:0 0 0 3px rgba(52,214,160,.15)}
+button{width:100%;margin-top:24px;padding:15px;border:0;border-radius:999px;background:linear-gradient(180deg,#34d6a0,#1fae80);color:#04261c;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 8px 24px -8px rgba(52,214,160,.7);transition:transform .2s}
+button:hover{transform:translateY(-2px)}
+.signup{display:block;text-align:center;margin-top:22px;padding:13px;border:1px solid rgba(52,214,160,.4);border-radius:999px;color:#34d6a0;text-decoration:none;font-weight:700;background:rgba(52,214,160,.06)}
+.signup:hover{background:rgba(52,214,160,.14)}
+.home{display:block;text-align:center;margin-top:18px;color:#9bb0aa;text-decoration:none}
+.home:hover{color:#34d6a0}
+@media(max-width:800px){.page{flex-direction:column}.hero,.form-side{width:100%}.hero{padding:35px 8%}.hero h2{margin-top:25px}.features{display:none}.form-side{padding:25px 16px}.card{padding:28px 22px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+
+<body>
+<div class="page">
+
+    <section class="hero">
+        <div class="brand">🌱 AgroFusion AI</div>
+        <div class="tagline">Smart Agriculture • Better Tomorrow</div>
+
+        <h2>Join Farmers Using AI-Powered Solutions</h2>
+
+        <p>
+            Create your account and get crop recommendations,
+            disease detection, weather updates and smart
+            farming guidance — all in one place.
+        </p>
+
+        <div class="features">
+            🌿 Crop Recommendation<br>
+            🛡️ Disease Detection<br>
+            🌤️ Weather Forecast<br>
+            📈 Better Yield & Higher Profit
+        </div>
+    </section>
+
+    <section class="form-side">
+        <div class="card">
+            <div class="logo">🌱</div>
+            <h1>Create Account</h1>
+            <p class="subtitle">Sign up for your AgroFusion AI account</p>
+
+            <form action="/signup" method="POST">
+                <label for="name">Full Name</label>
+                <input id="name" type="text" name="name"
+                       placeholder="Enter your full name" required>
+
+                <label for="email">Email Address</label>
+                <input id="email" type="email" name="email"
+                       placeholder="Enter your email" required>
+
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password"
+                       placeholder="Create a password (min 6 characters)"
+                       required minlength="6">
+
+                <button type="submit">👤 Sign Up</button>
+            </form>
+
+            <a class="signup" href="/login">↪ Already have an account? Login</a>
+            <a class="home" href="/">← Back to Home</a>
+        </div>
+    </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroFusion AI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+
+    <script>
+        if ("scrollRestoration" in history) { history.scrollRestoration = "manual"; }
+    </script>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="logo">
+            🌿 <b>AgroFusion <span>AI</span></b>
+            <small>Smart Agriculture • Better Tomorrow</small>
+        </div>
+
+        <ul>
+            <li><a href="/" class="active">Home</a></li>
+            <li><a href="#modules">AI Solutions ▾</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <div class="auth">
+            <a href="/login" class="btn outline">👤 Login</a>
+            <a href="/signup" class="btn green">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-text">
+
+            <p class="badge">
+                🌱 AI Powered Smart Agriculture Platform
+            </p>
+
+            <h1>
+                Empowering Agriculture<br>
+                with <span>Artificial Intelligence</span>
+            </h1>
+
+            <p class="sub">
+                Smart solutions for irrigation, crop harvesting, fruit analysis
+                and sustainable farming. Grow more, waste less, and build a greener future.
+            </p>
+
+            <div class="hero-btns">
+                <a href="#modules" class="btn green big">
+                    🍃 Explore 15 AI Solutions →
+                </a>
+
+                <a href="/dashboard" class="btn outline big">
+                    📊 View Dashboard
+                </a>
+            </div>
+
+        </div>
+
+        <div class="hero-art">
+            <!-- Square AI tile: click opens the chat window -->
+            <div class="hex h1x"
+                 onclick="if (window.AgroChat && AgroChat.toggle) { AgroChat.toggle(); } else { var f = document.querySelector('.af-fab'); if (f) f.click(); }"
+                 style="cursor:pointer;"
+                 title="Ask AI">AI</div>
+
+            <a href="/weather"
+               class="hex h2x"
+               title="Check Live Weather">💧</a>
+
+            <div class="hex h3x">🤖</div>
+            <div class="hex h4x">🚜</div>
+            <div class="hex h5x">📈</div>
+        </div>
+    </section>
+
+    <!-- AI MODULES -->
+    <section class="modules" id="modules">
+        <h2 class="pill">🍃 Our 15 AI Modules</h2>
+
+        <p class="mod-sub">
+            Discover powerful AI solutions designed to support every step
+            of your farming journey.
+        </p>
+
+        <div class="grid" id="grid"></div>
+    </section>
+
+    <!-- BOTTOM SECTION -->
+    <section class="bottom">
+        <div class="feats">
+            <div>🌱<span>Higher Yield</span></div>
+            <div>💧<span>Save Water</span></div>
+            <div>🗄️<span>Reduce Cost</span></div>
+            <div>✅<span>Better Quality</span></div>
+            <div>🍃<span>Sustainable Future</span></div>
+        </div>
+
+        <div class="cta" id="contact">
+            <h3>Together for a Greener Tomorrow</h3>
+
+            <p>
+                Let's build a smarter and more sustainable agriculture future with AI.
+            </p>
+
+            <a href="/signup" class="btn green">Get Started →</a>
+        </div>
+    </section>
+
+    <!-- 15 AI MODULES -->
+    <script>
+        const modules = [
+            ["💧", "Irrigation Requirement Prediction", "Predict water need for crops using soil, weather & climate data."],
+            ["🌾", "Crop Harvest Time Prediction", "Estimate the best harvest time using crop and weather data."],
+            ["🍎", "Fruit Ripeness Detection", "Detect ripeness stage of fruits using AI & image analysis."],
+            ["🛡️", "Fruit Quality Grading", "Grade fruits based on quality, size and color."],
+            ["🌿", "Weed Detection", "Detect weeds in fields using image analysis."],
+            ["🐛", "Pest Detection", "Identify pests in crops using AI."],
+            ["📈", "Agricultural Price Prediction", "Predict crop prices based on market trends."],
+            ["💰", "Farm Profit Prediction", "Estimate expected profit from cost, yield and price."],
+            ["🚿", "Crop Water Requirement Prediction", "Find how much water each crop needs."],
+            ["🧪", "Smart Fertilizer Recommendation", "Suggest the right fertilizer based on soil & crop needs."],
+            ["🥀", "Crop Stress Detection", "Detect crop stress early from leaf images."],
+            ["🌰", "Seed Quality Classification", "Classify seeds as good or bad quality."],
+            ["🌱", "Plant Growth Prediction", "Forecast plant growth stage and height."],
+            ["♻️", "Agricultural Waste Classification", "Sort farm waste for reuse and recycling."],
+            ["🌽", "Crop Recommendation", "Recommend the best crop for your soil and climate."]
+        ];
+
+        const grid = document.getElementById("grid");
+
+        modules.forEach((module, index) => {
+            const card = document.createElement("div");
+            card.className = "card";
+
+            card.innerHTML = `
+                <div class="card-top">
+                    <span class="num">${index + 1}</span>
+                    <span class="ico">${module[0]}</span>
+                    <h4>${module[1]}</h4>
+                </div>
+                <p>${module[2]}</p>
+                <a href="/module?id=${index}" class="try">Try Now →</a>
+            `;
+
+            grid.appendChild(card);
+        });
+    </script>
+
+    <!-- NAVIGATION: instant jump, no animation -->
+    <script>
+        document.addEventListener("click", function (e) {
+            var a = e.target.closest("a");
+            if (!a) return;
+            var h = a.getAttribute("href");
+            if (!h) return;
+
+            if (h === "/" && location.pathname === "/") {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "instant" });
+                return;
+            }
+
+            if (h.charAt(0) === "#" && h.length > 1) {
+                var el = document.querySelector(h);
+                if (!el) return;
+                e.preventDefault();
+                var off = (h === "#modules") ? 90 : 20;
+                var y = el.getBoundingClientRect().top + window.pageYOffset - off;
+                window.scrollTo({ top: y, behavior: "instant" });
+            }
+        });
+    </script>
+
+    <!-- CHAT AND LANGUAGE SCRIPTS -->
+    {% if not request.args.get('nochat') %}
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
+    {% endif %}
+    {% if not request.args.get('nolang') %}
+    <script src="{{ url_for('static', filename='lang.js') }}"></script>
+    {% endif %}
+
+</body>
+</html>

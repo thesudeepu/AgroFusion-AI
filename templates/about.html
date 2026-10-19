@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | AgroFusion AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <nav>
+    <div class="logo">🌿 <b>AgroFusion <span>AI</span></b><small>Smart Agriculture • Better Tomorrow</small></div>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/#modules">AI Solutions ▾</a></li>
+      <li><a href="/dashboard">Dashboard</a></li>
+      <li><a href="/about" class="active">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div class="auth">
+      <a href="/login" class="btn outline">👤 Login</a>
+      <a href="/signup" class="btn green">Sign Up</a>
+    </div>
+  </nav>
+
+  <section class="about">
+    <p class="badge">🌱 About Us</p>
+    <h1>About <span>AgroFusion AI</span></h1>
+    <p class="sub">An AI powered smart agriculture platform that helps farmers make better decisions, grow more and waste less.</p>
+
+    <div class="two">
+      <div class="box">
+        <h3>🎯 Our Mission</h3>
+        <p>To bring the power of Artificial Intelligence to every farm. We want farmers to decide about irrigation, crops, fertilizer and harvest time using data instead of guesswork.</p>
+      </div>
+      <div class="box">
+        <h3>🔭 Our Vision</h3>
+        <p>A smarter, more sustainable and more profitable agriculture future, where technology supports farmers at every step of their journey.</p>
+      </div>
+    </div>
+
+    <div class="nums">
+      <div class="card"><div class="v">15</div><div class="l">AI Modules</div></div>
+      <div class="card"><div class="v">22+</div><div class="l">Crops Supported</div></div>
+      <div class="card"><div class="v">7</div><div class="l">Soil &amp; Climate Inputs</div></div>
+      <div class="card"><div class="v">24/7</div><div class="l">Always Available</div></div>
+    </div>
+
+    <div class="box">
+      <h3>🤖 What We Offer</h3>
+      <p>Our platform brings 15 AI solutions in one place: irrigation prediction, crop recommendation, harvest time, fruit ripeness and quality grading, weed and pest detection, price and profit prediction, fertilizer recommendation, crop stress detection, seed quality, plant growth and agricultural waste classification.</p>
+    </div>
+
+    <div class="three">
+      <div class="card step">
+        <span class="num">1</span>
+        <h4>Enter Your Data</h4>
+        <p>Give simple inputs like soil nutrients, temperature, humidity, rainfall, or upload a photo.</p>
+      </div>
+      <div class="card step">
+        <span class="num">2</span>
+        <h4>AI Analyses</h4>
+        <p>Our trained models study the data and find the best result for your farm.</p>
+      </div>
+      <div class="card step">
+        <span class="num">3</span>
+        <h4>Get Recommendation</h4>
+        <p>Receive a clear answer instantly and take action with confidence.</p>
+      </div>
+    </div>
+
+    <div class="box">
+      <h3>🌍 Why AgroFusion AI?</h3>
+      <p>🌱 Higher yield &nbsp;•&nbsp; 💧 Save water &nbsp;•&nbsp; 🗄️ Reduce cost &nbsp;•&nbsp; ✅ Better quality &nbsp;•&nbsp; 🍃 Sustainable future</p>
+    </div>
+
+    <div class="box cta-box">
+      <h3>Together for a Greener Tomorrow</h3>
+      <p>Let's build a smarter and more sustainable agriculture future with AI.</p>
+      <a href="/signup" class="btn green">Get Started →</a>
+    </div>
+  </section>
+
+  <script src="{{ url_for('static', filename='lang.js') }}"></script>
+
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroFusion AI - Module</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav>
+    <div class="logo">🌿 <b>AgroFusion <span>AI</span></b><small>Smart Agriculture • Better Tomorrow</small></div>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/#modules">AI Solutions ▾</a></li>
+      <li><a href="/dashboard">Dashboard</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div class="auth">
+      <a href="/login" class="btn outline">👤 Login</a>
+      <a href="/signup" class="btn green">Sign Up</a>
+    </div>
+  </nav>
+
+  <section class="panel">
+    <p><a href="/#modules" class="btn outline">← All Modules</a></p>
+    <div class="big-ico" id="ico"></div>
+    <h1 id="title"></h1>
+    <p id="desc" class="sub"></p>
+    <div id="box"></div>
+    <div id="out"></div>
+  </section>
+
+  <script src="{{ url_for('static', filename='lang.js') }}"></script>
+
+<script>
+/* ---------- Translations for this page (English -> [Kannada, Hindi]) ---------- */
+var X = {
+  // module titles
+  "Irrigation Requirement Prediction": ["ನೀರಾವರಿ ಅಗತ್ಯ ಮುನ್ಸೂಚನೆ", "सिंचाई आवश्यकता पूर्वानुमान"],
+  "Crop Harvest Time Prediction": ["ಬೆಳೆ ಕೊಯ್ಲು ಸಮಯದ ಮುನ್ಸೂಚನೆ", "फसल कटाई समय पूर्वानुमान"],
+  "Fruit Ripeness Detection": ["ಹಣ್ಣು ಮಾಗುವಿಕೆ ಪತ್ತೆ", "फल पकने की पहचान"],
+  "Fruit Quality Grading": ["ಹಣ್ಣಿನ ಗುಣಮಟ್ಟ ಶ್ರೇಣೀಕರಣ", "फल गुणवत्ता ग्रेडिंग"],
+  "Weed Detection": ["ಕಳೆ ಪತ್ತೆ", "खरपतवार की पहचान"],
+  "Pest Detection": ["ಕೀಟ ಪತ್ತೆ", "कीट की पहचान"],
+  "Agricultural Price Prediction": ["ಕೃಷಿ ಬೆಲೆ ಮುನ್ಸೂಚನೆ", "कृषि मूल्य पूर्वानुमान"],
+  "Farm Profit Prediction": ["ಕೃಷಿ ಲಾಭ ಮುನ್ಸೂಚನೆ", "खेती मुनाफा पूर्वानुमान"],
+  "Crop Water Requirement Prediction": ["ಬೆಳೆ ನೀರಿನ ಅಗತ್ಯ ಮುನ್ಸೂಚನೆ", "फसल जल आवश्यकता पूर्वानुमान"],
+  "Smart Fertilizer Recommendation": ["ಸ್ಮಾರ್ಟ್ ಗೊಬ್ಬರ ಶಿಫಾರಸು", "स्मार्ट उर्वरक सिफारिश"],
+  "Crop Stress Detection": ["ಬೆಳೆ ಒತ್ತಡ ಪತ್ತೆ", "फसल तनाव की पहचान"],
+  "Seed Quality Classification": ["ಬೀಜ ಗುಣಮಟ್ಟ ವರ್ಗೀಕರಣ", "बीज गुणवत्ता वर्गीकरण"],
+  "Plant Growth Prediction": ["ಸಸ್ಯ ಬೆಳವಣಿಗೆ ಮುನ್ಸೂಚನೆ", "पौधे की वृद्धि पूर्वानुमान"],
+  "Agricultural Waste Classification": ["ಕೃಷಿ ತ್ಯಾಜ್ಯ ವರ್ಗೀಕರಣ", "कृषि अपशिष्ट वर्गीकरण"],
+  "Crop Recommendation": ["ಬೆಳೆ ಶಿಫಾರಸು", "फसल सिफारिश"],
+
+  // module descriptions
+  "Predict how much water your crop needs today.": ["ನಿಮ್ಮ ಬೆಳೆಗೆ ಇಂದು ಎಷ್ಟು ನೀರು ಬೇಕು ಎಂದು ಅಂದಾಜಿಸಿ.", "अनुमान लगाएं कि आपकी फसल को आज कितना पानी चाहिए।"],
+  "Find how many days are left for harvest.": ["ಕೊಯ್ಲಿಗೆ ಇನ್ನು ಎಷ್ಟು ದಿನ ಬಾಕಿ ಎಂದು ತಿಳಿಯಿರಿ.", "जानें कि कटाई में कितने दिन बाकी हैं।"],
+  "Upload a fruit photo to find its ripeness.": ["ಹಣ್ಣಿನ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ಮಾಗುವಿಕೆ ತಿಳಿಯಿರಿ.", "फल की फोटो अपलोड करके उसके पकने की स्थिति जानें।"],
+  "Upload a fruit photo to get its grade.": ["ಹಣ್ಣಿನ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ದರ್ಜೆ ತಿಳಿಯಿರಿ.", "फल की फोटो अपलोड करके उसका ग्रेड जानें।"],
+  "Upload a field photo to detect weeds.": ["ಹೊಲದ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ಕಳೆ ಪತ್ತೆ ಮಾಡಿ.", "खेत की फोटो अपलोड करके खरपतवार पहचानें।"],
+  "Upload a leaf photo to detect pests.": ["ಎಲೆಯ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ಕೀಟ ಪತ್ತೆ ಮಾಡಿ.", "पत्ते की फोटो अपलोड करके कीट पहचानें।"],
+  "Predict the next market price.": ["ಮುಂದಿನ ಮಾರುಕಟ್ಟೆ ಬೆಲೆಯನ್ನು ಊಹಿಸಿ.", "अगले बाज़ार भाव का अनुमान लगाएं।"],
+  "Estimate your profit before you sow.": ["ಬಿತ್ತನೆಗೂ ಮೊದಲೇ ನಿಮ್ಮ ಲಾಭವನ್ನು ಅಂದಾಜಿಸಿ.", "बुवाई से पहले अपने मुनाफे का अनुमान लगाएं।"],
+  "Find total water needed for your land.": ["ನಿಮ್ಮ ಜಮೀನಿಗೆ ಬೇಕಾದ ಒಟ್ಟು ನೀರನ್ನು ತಿಳಿಯಿರಿ.", "अपनी जमीन के लिए कुल पानी की जरूरत जानें।"],
+  "Get the right fertilizer for your soil.": ["ನಿಮ್ಮ ಮಣ್ಣಿಗೆ ಸರಿಯಾದ ಗೊಬ್ಬರ ಪಡೆಯಿರಿ.", "अपनी मिट्टी के लिए सही उर्वरक पाएं।"],
+  "Upload a leaf photo to detect stress.": ["ಎಲೆಯ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ಒತ್ತಡ ಪತ್ತೆ ಮಾಡಿ.", "पत्ते की फोटो अपलोड करके तनाव पहचानें।"],
+  "Upload a seed photo to check quality.": ["ಬೀಜದ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ಗುಣಮಟ್ಟ ಪರೀಕ್ಷಿಸಿ.", "बीज की फोटो अपलोड करके गुणवत्ता जांचें।"],
+  "Predict plant height at a given age.": ["ನಿರ್ದಿಷ್ಟ ವಯಸ್ಸಿನಲ್ಲಿ ಸಸ್ಯದ ಎತ್ತರ ಊಹಿಸಿ.", "किसी उम्र पर पौधे की ऊंचाई का अनुमान लगाएं।"],
+  "Upload a photo of farm waste to sort it.": ["ಕೃಷಿ ತ್ಯಾಜ್ಯದ ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ ವಿಂಗಡಿಸಿ.", "खेती के कचरे की फोटो अपलोड करके उसे छांटें।"],
+  "Find the best crop for your soil and rainfall.": ["ನಿಮ್ಮ ಮಣ್ಣು ಮತ್ತು ಮಳೆಗೆ ಉತ್ತಮ ಬೆಳೆ ತಿಳಿಯಿರಿ.", "अपनी मिट्टी और वर्षा के लिए सबसे अच्छी फसल जानें।"],
+
+  // crops
+  "Rice": ["ಭತ್ತ", "चावल"], "Ragi": ["ರಾಗಿ", "रागी"], "Jowar": ["ಜೋಳ", "ज्वार"],
+  "Maize": ["ಮೆಕ್ಕೆಜೋಳ", "मक्का"], "Sugarcane": ["ಕಬ್ಬು", "गन्ना"], "Tomato": ["ಟೊಮೆಟೊ", "टमाटर"],
+
+  // field labels
+  "Crop": ["ಬೆಳೆ", "फसल"],
+  "Soil moisture (%)": ["ಮಣ್ಣಿನ ತೇವಾಂಶ (%)", "मिट्टी की नमी (%)"],
+  "Temperature (°C)": ["ತಾಪಮಾನ (°C)", "तापमान (°C)"],
+  "Days since sowing": ["ಬಿತ್ತನೆಯಾದ ದಿನಗಳು", "बुवाई के बाद के दिन"],
+  "Current price (Rs/quintal)": ["ಪ್ರಸ್ತುತ ಬೆಲೆ (ರೂ/ಕ್ವಿಂಟಾಲ್)", "वर्तमान कीमत (रु/क्विंटल)"],
+  "Rainfall index (0-100)": ["ಮಳೆ ಸೂಚ್ಯಂಕ (0-100)", "वर्षा सूचकांक (0-100)"],
+  "Land (acres)": ["ಜಮೀನು (ಎಕರೆ)", "भूमि (एकड़)"],
+  "Cost (Rs/acre)": ["ವೆಚ್ಚ (ರೂ/ಎಕರೆ)", "लागत (रु/एकड़)"],
+  "Yield (quintal/acre)": ["ಇಳುವರಿ (ಕ್ವಿಂಟಾಲ್/ಎಕರೆ)", "उपज (क्विंटल/एकड़)"],
+  "Price (Rs/quintal)": ["ಬೆಲೆ (ರೂ/ಕ್ವಿಂಟಾಲ್)", "कीमत (रु/क्विंटल)"],
+  "Crop age (days)": ["ಬೆಳೆಯ ವಯಸ್ಸು (ದಿನಗಳು)", "फसल की आयु (दिन)"],
+  "Nitrogen (N)": ["ಸಾರಜನಕ (N)", "नाइट्रोजन (N)"],
+  "Phosphorus (P)": ["ರಂಜಕ (P)", "फॉस्फोरस (P)"],
+  "Potassium (K)": ["ಪೊಟ್ಯಾಸಿಯಮ್ (K)", "पोटैशियम (K)"],
+  "Days": ["ದಿನಗಳು", "दिन"],
+  "Soil pH": ["ಮಣ್ಣಿನ pH", "मिट्टी का pH"],
+  "Rainfall (mm)": ["ಮಳೆ (ಮಿಮೀ)", "वर्षा (मिमी)"],
+
+  // result messages
+  "Soil is dry. Irrigate today.": ["ಮಣ್ಣು ಒಣಗಿದೆ. ಇಂದೇ ನೀರು ಹಾಯಿಸಿ.", "मिट्टी सूखी है। आज ही सिंचाई करें।"],
+  "Moisture is enough. You can wait.": ["ತೇವಾಂಶ ಸಾಕಷ್ಟಿದೆ. ಕಾಯಬಹುದು.", "नमी पर्याप्त है। आप रुक सकते हैं।"],
+  "Harvest time is coming.": ["ಕೊಯ್ಲು ಸಮಯ ಹತ್ತಿರ ಬರುತ್ತಿದೆ.", "कटाई का समय नज़दीक आ रहा है।"],
+  "Ready to harvest!": ["ಕೊಯ್ಲಿಗೆ ಸಿದ್ಧ!", "कटाई के लिए तैयार!"],
+  "Price may go up.": ["ಬೆಲೆ ಏರಬಹುದು.", "कीमत बढ़ सकती है।"],
+  "Price may go down.": ["ಬೆಲೆ ಇಳಿಯಬಹುದು.", "कीमत घट सकती है।"],
+  "You can expect a profit.": ["ನೀವು ಲಾಭ ನಿರೀಕ್ಷಿಸಬಹುದು.", "आप मुनाफे की उम्मीद कर सकते हैं।"],
+  "Loss possible. Reduce cost.": ["ನಷ್ಟ ಸಾಧ್ಯತೆ ಇದೆ. ವೆಚ್ಚ ಕಡಿಮೆ ಮಾಡಿ.", "नुकसान संभव है। लागत कम करें।"],
+  "Calculated for the crop stage.": ["ಬೆಳೆಯ ಹಂತಕ್ಕೆ ಅನುಗುಣವಾಗಿ ಲೆಕ್ಕಿಸಲಾಗಿದೆ.", "फसल की अवस्था के अनुसार गणना की गई।"],
+  "Your soil is lowest in this nutrient.": ["ನಿಮ್ಮ ಮಣ್ಣಿನಲ್ಲಿ ಈ ಪೋಷಕಾಂಶ ಅತಿ ಕಡಿಮೆ ಇದೆ.", "आपकी मिट्टी में यह पोषक तत्व सबसे कम है।"],
+  "Estimated plant height.": ["ಅಂದಾಜು ಸಸ್ಯದ ಎತ್ತರ.", "अनुमानित पौधे की ऊंचाई।"],
+  "Best crop for your soil and rainfall.": ["ನಿಮ್ಮ ಮಣ್ಣು ಮತ್ತು ಮಳೆಗೆ ಉತ್ತಮ ಬೆಳೆ.", "आपकी मिट्टी और वर्षा के लिए सबसे अच्छी फसल।"],
+  "Urea": ["ಯೂರಿಯಾ", "यूरिया"],
+  "Muriate of Potash": ["ಮ್ಯುರಿಯೇಟ್ ಆಫ್ ಪೊಟ್ಯಾಶ್", "म्यूरेट ऑफ पोटाश"],
+
+  // units
+  "days left": ["ದಿನ ಬಾಕಿ", "दिन बाकी"],
+  "mm/day": ["ಮಿಮೀ/ದಿನ", "मिमी/दिन"],
+  "litres/day": ["ಲೀಟರ್/ದಿನ", "लीटर/दिन"],
+  "cm": ["ಸೆಂ.ಮೀ", "सेमी"],
+  "Rs": ["ರೂ.", "रु."],
+  "quintal": ["ಕ್ವಿಂಟಾಲ್", "क्विंटल"],
+
+  // buttons and messages
+  "📷 Click to upload a photo": ["📷 ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಲು ಕ್ಲಿಕ್ ಮಾಡಿ", "📷 फोटो अपलोड करने के लिए क्लिक करें"],
+  "Analyze": ["ವಿಶ್ಲೇಷಿಸಿ", "विश्लेषण करें"],
+  "Get Result": ["ಫಲಿತಾಂಶ ಪಡೆಯಿರಿ", "नतीजा पाएं"],
+  "Please upload a photo first.": ["ದಯವಿಟ್ಟು ಮೊದಲು ಫೋಟೋ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.", "कृपया पहले फोटो अपलोड करें।"],
+  "AI confidence": ["AI ವಿಶ್ವಾಸಾರ್ಹತೆ", "AI विश्वास"],
+  "Demo result. A real AI model will be connected later.": ["ಇದು ಡೆಮೊ ಫಲಿತಾಂಶ. ನಿಜವಾದ AI ಮಾದರಿಯನ್ನು ನಂತರ ಜೋಡಿಸಲಾಗುವುದು.", "यह डेमो नतीजा है। असली AI मॉडल बाद में जोड़ा जाएगा।"],
+
+  // photo analysis results
+  "Unripe": ["ಹಸಿ", "कच्चा"], "Semi-ripe": ["ಅರೆ ಮಾಗಿದ", "अधपका"], "Ripe": ["ಮಾಗಿದ", "पका"], "Overripe": ["ಅತಿಯಾಗಿ ಮಾಗಿದ", "अधिक पका"],
+  "Grade A": ["ದರ್ಜೆ A", "ग्रेड A"], "Grade B": ["ದರ್ಜೆ B", "ग्रेड B"], "Grade C": ["ದರ್ಜೆ C", "ग्रेड C"], "Rejected": ["ತಿರಸ್ಕೃತ", "अस्वीकृत"],
+  "No weeds": ["ಕಳೆ ಇಲ್ಲ", "कोई खरपतवार नहीं"], "Few weeds": ["ಸ್ವಲ್ಪ ಕಳೆ", "थोड़े खरपतवार"], "Heavy weeds": ["ಹೆಚ್ಚು ಕಳೆ", "अधिक खरपतवार"],
+  "Healthy": ["ಆರೋಗ್ಯಕರ", "स्वस्थ"], "Aphids": ["ಹೇನು", "माहू"], "Caterpillar": ["ಕಂಬಳಿ ಹುಳು", "इल्ली"], "Armyworm": ["ಸೈನಿಕ ಹುಳು", "सैनिक कीट"],
+  "No stress": ["ಒತ್ತಡ ಇಲ್ಲ", "कोई तनाव नहीं"], "Water stress": ["ನೀರಿನ ಒತ್ತಡ", "जल तनाव"],
+  "Nutrient deficiency": ["ಪೋಷಕಾಂಶ ಕೊರತೆ", "पोषक तत्वों की कमी"], "Disease signs": ["ರೋಗದ ಲಕ್ಷಣಗಳು", "रोग के लक्षण"],
+  "Good seed": ["ಉತ್ತಮ ಬೀಜ", "अच्छा बीज"], "Average": ["ಸರಾಸರಿ", "औसत"], "Bad seed": ["ಕಳಪೆ ಬೀಜ", "खराब बीज"],
+  "Compostable": ["ಕಾಂಪೋಸ್ಟ್ ಮಾಡಬಹುದು", "खाद बन सकती है"], "Animal fodder": ["ಜಾನುವಾರು ಮೇವು", "पशु चारा"],
+  "Biofuel": ["ಜೈವಿಕ ಇಂಧನ", "जैव ईंधन"], "Not reusable": ["ಮರುಬಳಕೆ ಸಾಧ್ಯವಿಲ್ಲ", "पुन: उपयोग योग्य नहीं"]
+};
+
+var lang = "en";
+try { lang = localStorage.getItem("lang") || "en"; } catch (e) {}
+
+function L(s) {
+  if (lang === "en") return s;
+  var h = X[s];
+  if (!h) return s;
+  return h[lang === "kn" ? 0 : 1] || s;
+}
+
+/* ---------- Module data ---------- */
+const CROPS = ["Rice", "Ragi", "Jowar", "Maize", "Sugarcane", "Tomato"];
+const DUR = { Rice:120, Ragi:105, Jowar:110, Maize:100, Sugarcane:330, Tomato:90 };
+const WAT = { Rice:7, Ragi:3, Jowar:3.5, Maize:4.5, Sugarcane:8, Tomato:5 };
+const crop = { k:"crop", l:"Crop", t:"sel" };
+const num = (k, l, d) => ({ k, l, t:"num", d });
+
+const T = [
+ { i:"💧", n:"Irrigation Requirement Prediction", d:"Predict how much water your crop needs today.",
+   f:[crop, num("m","Soil moisture (%)",30), num("t","Temperature (°C)",32)],
+   fn:v => { const mm=(WAT[v.crop]*(1+(v.t-25)/40)*(1-v.m/100)*1.6).toFixed(1);
+     return [mm+" "+L("mm/day"), L(v.m<35?"Soil is dry. Irrigate today.":"Moisture is enough. You can wait."), Math.min(100,mm*10)]; } },
+ { i:"🌾", n:"Crop Harvest Time Prediction", d:"Find how many days are left for harvest.",
+   f:[crop, num("d","Days since sowing",60)],
+   fn:v => { const l=Math.max(0,DUR[v.crop]-v.d);
+     return [l+" "+L("days left"), L(l?"Harvest time is coming.":"Ready to harvest!"), Math.min(100,v.d/DUR[v.crop]*100)]; } },
+ { i:"🍎", n:"Fruit Ripeness Detection", d:"Upload a fruit photo to find its ripeness.", img:["Unripe","Semi-ripe","Ripe","Overripe"] },
+ { i:"🛡️", n:"Fruit Quality Grading", d:"Upload a fruit photo to get its grade.", img:["Grade A","Grade B","Grade C","Rejected"] },
+ { i:"🌿", n:"Weed Detection", d:"Upload a field photo to detect weeds.", img:["No weeds","Few weeds","Heavy weeds"] },
+ { i:"🐛", n:"Pest Detection", d:"Upload a leaf photo to detect pests.", img:["Healthy","Aphids","Caterpillar","Armyworm"] },
+ { i:"📈", n:"Agricultural Price Prediction", d:"Predict the next market price.",
+   f:[crop, num("p","Current price (Rs/quintal)",2200), num("r","Rainfall index (0-100)",50)],
+   fn:v => { const p=Math.round(v.p*(1+(v.r-50)/400));
+     return [L("Rs")+" "+p+" / "+L("quintal"), L(p>v.p?"Price may go up.":"Price may go down."), 60]; } },
+ { i:"💰", n:"Farm Profit Prediction", d:"Estimate your profit before you sow.",
+   f:[num("a","Land (acres)",2), num("c","Cost (Rs/acre)",25000), num("y","Yield (quintal/acre)",18), num("p","Price (Rs/quintal)",2200)],
+   fn:v => { const pr=v.a*(v.y*v.p-v.c);
+     return [L("Rs")+" "+pr.toLocaleString("en-IN"), L(pr>0?"You can expect a profit.":"Loss possible. Reduce cost."), Math.max(5,Math.min(100,pr/v.a/400))]; } },
+ { i:"🚿", n:"Crop Water Requirement Prediction", d:"Find total water needed for your land.",
+   f:[crop, num("a","Land (acres)",1), num("d","Crop age (days)",60)],
+   fn:v => { const Lt=Math.round(WAT[v.crop]*4046*v.a*(v.d>20?1:.5));
+     return [Lt.toLocaleString("en-IN")+" "+L("litres/day"), L("Calculated for the crop stage."), Math.min(100,Lt/800)]; } },
+ { i:"🧪", n:"Smart Fertilizer Recommendation", d:"Get the right fertilizer for your soil.",
+   f:[num("N","Nitrogen (N)",40), num("P","Phosphorus (P)",30), num("K","Potassium (K)",30)],
+   fn:v => { const m=Math.min(v.N,v.P,v.K);
+     const r=m===v.N?"Urea":m===v.P?"DAP / SSP":"Muriate of Potash";
+     return [L(r), L("Your soil is lowest in this nutrient."), 100-m]; } },
+ { i:"🥀", n:"Crop Stress Detection", d:"Upload a leaf photo to detect stress.", img:["No stress","Water stress","Nutrient deficiency","Disease signs"] },
+ { i:"🌰", n:"Seed Quality Classification", d:"Upload a seed photo to check quality.", img:["Good seed","Average","Bad seed"] },
+ { i:"🌱", n:"Plant Growth Prediction", d:"Predict plant height at a given age.",
+   f:[crop, num("d","Days",40)],
+   fn:v => { const h=Math.round(160/(1+Math.exp(-(v.d-DUR[v.crop]/2)/(DUR[v.crop]/8))));
+     return [h+" "+L("cm"), L("Estimated plant height."), Math.min(100,h/1.6)]; } },
+ { i:"♻️", n:"Agricultural Waste Classification", d:"Upload a photo of farm waste to sort it.", img:["Compostable","Animal fodder","Biofuel","Not reusable"] },
+ { i:"🌽", n:"Crop Recommendation", d:"Find the best crop for your soil and rainfall.",
+   f:[num("N","Nitrogen (N)",60), num("P","Phosphorus (P)",40), num("K","Potassium (K)",40), num("ph","Soil pH",6.5), num("r","Rainfall (mm)",800)],
+   fn:v => { const c=v.r>1100?"Rice":v.r>800?"Sugarcane":v.r>600?"Maize":v.r>400?"Ragi":"Jowar";
+     return [L(c), L("Best crop for your soil and rainfall."), 82]; } }
+];
+
+const id = parseInt(new URLSearchParams(location.search).get("id")) || 0;
+const t = T[id];
+const box = document.getElementById("box");
+const out = document.getElementById("out");
+
+let saved = {};
+let imgSrc = null, imgSize = 0;
+let lastCall = null;
+
+function show(r) {
+  out.innerHTML = `<div class="result"><div class="rbig">${r[0]}</div><p>${r[1]}</p>
+    <div class="bar"><i style="width:${r[2]}%"></i></div>
+    <small>${L("Demo result. A real AI model will be connected later.")}</small></div>`;
+}
+
+function snap() {
+  saved = {};
+  if (t.f) t.f.forEach(f => {
+    const e = document.getElementById("f_" + f.k);
+    if (e) saved[f.k] = e.value;
+  });
+}
+
+function render() {
+  document.getElementById("ico").textContent = t.i;
+  document.getElementById("title").textContent = (id + 1) + ". " + L(t.n);
+  document.getElementById("desc").textContent = L(t.d);
+  document.title = t.n + " - AgroFusion AI";
+
+  if (t.img) {
+    box.innerHTML = `<label class="drop" id="dz"><span id="dzc">${imgSrc ? `<img src="${imgSrc}">` : L("📷 Click to upload a photo")}</span>
+      <input type="file" accept="image/*" id="file" hidden></label>
+      <button class="btn green big" id="go">${L("Analyze")}</button>`;
+    document.getElementById("file").onchange = e => {
+      const f = e.target.files[0]; if (!f) return;
+      imgSize = f.size;
+      const r = new FileReader();
+      r.onload = ev => {
+        imgSrc = ev.target.result;
+        document.getElementById("dzc").innerHTML = `<img src="${imgSrc}">`;
+      };
+      r.readAsDataURL(f);
+    };
+    document.getElementById("go").onclick = () => {
+      if (!imgSize) { lastCall = null; out.innerHTML = `<div class="result">${L("Please upload a photo first.")}</div>`; return; }
+      const cls = t.img[imgSize % t.img.length], p = 70 + imgSize % 26;
+      lastCall = () => [L(cls), L("AI confidence") + ": " + p + "%", p];
+      show(lastCall());
+    };
+  } else {
+    box.innerHTML = `<div class="form">` + t.f.map(f => {
+      const val = saved[f.k] !== undefined ? saved[f.k] : f.d;
+      return `<div><label>${L(f.l)}</label>` + (f.t === "sel"
+        ? `<select id="f_${f.k}">${CROPS.map(c => `<option value="${c}"${saved[f.k] === c ? " selected" : ""}>${L(c)}</option>`).join("")}</select>`
+        : `<input id="f_${f.k}" type="number" step="any" value="${val}">`) + `</div>`;
+    }).join("") + `</div><button class="btn green big" id="go">${L("Get Result")}</button>`;
+    document.getElementById("go").onclick = () => {
+      const v = {};
+      t.f.forEach(f => { const e = document.getElementById("f_" + f.k); v[f.k] = f.t === "sel" ? e.value : parseFloat(e.value) || 0; });
+      lastCall = () => t.fn(v);
+      show(lastCall());
+    };
+  }
+}
+
+render();
+
+/* re-draw this page when the language is changed */
+const langSel = document.getElementById("langSel");
+if (langSel) {
+  langSel.addEventListener("change", () => {
+    lang = langSel.value;
+    snap();
+    render();
+    if (lastCall) show(lastCall());
+  });
+}
+</script>
+</body>
+</html>

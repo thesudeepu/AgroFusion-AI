@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | AgroFusion AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <nav>
+    <div class="logo">🌿 <b>AgroFusion <span>AI</span></b><small>Smart Agriculture • Better Tomorrow</small></div>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/#modules">AI Solutions ▾</a></li>
+      <li><a href="/dashboard" class="active">Dashboard</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div class="auth">
+      <a href="/login" class="btn outline">👤 Login</a>
+      <a href="/signup" class="btn green">Sign Up</a>
+    </div>
+  </nav>
+
+  <section class="dash">
+    <div class="dash-head">
+      <p class="badge">📊 Smart Farm Dashboard</p>
+      <h1>Welcome to your <span>Dashboard</span></h1>
+      <p class="sub">Monitor your farm, check crop insights and get AI recommendations.</p>
+    </div>
+
+    <div class="stats">
+      <div class="card stat"><span class="ico">🌾</span><div class="val" id="c1">0</div><div class="lab">Crops Analysed</div></div>
+      <div class="card stat"><span class="ico">🧪</span><div class="val" id="c2">0</div><div class="lab">Soil Health Score</div></div>
+      <div class="card stat"><span class="ico">☁️</span><div class="val" id="c3">0</div><div class="lab">Rainfall (mm)</div></div>
+      <div class="card stat"><span class="ico">📈</span><div class="val" id="c4">0</div><div class="lab">Predicted Yield (%)</div></div>
+    </div>
+
+    <div class="two">
+      <div class="box">
+        <h3>📊 Monthly Crop Yield</h3>
+        <div class="cols" id="cols"></div>
+      </div>
+      <div class="box">
+        <h3>🧪 Soil Nutrients</h3>
+        <div class="meter"><p><span>Nitrogen (N)</span><span>78%</span></p><div class="bar"><i style="width:78%"></i></div></div>
+        <div class="meter"><p><span>Phosphorus (P)</span><span>64%</span></p><div class="bar"><i style="width:64%"></i></div></div>
+        <div class="meter"><p><span>Potassium (K)</span><span>85%</span></p><div class="bar"><i style="width:85%"></i></div></div>
+        <div class="meter"><p><span>Moisture</span><span>52%</span></p><div class="bar"><i style="width:52%"></i></div></div>
+      </div>
+    </div>
+
+    <div class="box" style="margin-bottom:18px">
+      <h3>🤖 AI Crop Recommendation</h3>
+      <div class="form">
+        <div><label>Nitrogen (N)</label><input type="number" id="n" placeholder="90"></div>
+        <div><label>Phosphorus (P)</label><input type="number" id="p" placeholder="42"></div>
+        <div><label>Potassium (K)</label><input type="number" id="k" placeholder="43"></div>
+        <div><label>Temperature °C</label><input type="number" id="t" placeholder="25"></div>
+        <div><label>Humidity %</label><input type="number" id="h" placeholder="80"></div>
+        <div><label>pH</label><input type="number" step="0.1" id="ph" placeholder="6.5"></div>
+        <div><label>Rainfall mm</label><input type="number" id="r" placeholder="200"></div>
+      </div>
+      <button class="btn green" onclick="predictCrop()">🌱 Recommend Crop</button>
+      <div class="result" id="result" style="display:none"></div>
+    </div>
+
+    <div class="box">
+      <h3>⚡ Quick Actions</h3>
+      <div class="actions">
+        <a class="btn outline" href="/#modules">🍃 AI Solutions</a>
+        <a class="btn outline" href="/about">ℹ️ About</a>
+        <a class="btn outline" href="/login">👤 Login</a>
+        <a class="btn outline" href="/signup">📝 Sign Up</a>
+        <a class="btn outline" href="/">🏠 Home</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function count(id, end) {
+      let n = 0;
+      const el = document.getElementById(id);
+      const step = Math.max(1, Math.ceil(end / 50));
+      const timer = setInterval(() => {
+        n += step;
+        if (n >= end) {
+          n = end;
+          clearInterval(timer);
+        }
+        el.textContent = n;
+      }, 25);
+    }
+
+    count("c1", 128);
+    count("c2", 86);
+    count("c3", 214);
+    count("c4", 92);
+
+    const data = [["Jan",45],["Feb",58],["Mar",72],["Apr",66],["May",84],["Jun",95],["Jul",78]];
+    const cols = document.getElementById("cols");
+
+    data.forEach(([month, value]) => {
+      cols.innerHTML += `<div class="col"><b>${value}</b><i style="height:${value}%"></i><span>${month}</span></div>`;
+    });
+
+    // ================== CROP RECOMMENDATION ==================
+    async function predictCrop() {
+      const body = {
+        N: document.getElementById("n").value || 60,
+        P: document.getElementById("p").value || 40,
+        K: document.getElementById("k").value || 40,
+        temperature: document.getElementById("t").value || 25,
+        humidity: document.getElementById("h").value || 70,
+        ph: document.getElementById("ph").value || 6.5,
+        rainfall: document.getElementById("r").value || 100
+      };
+
+      const box = document.getElementById("result");
+      box.style.display = "block";
+      box.textContent = "⏳ Analysing...";
+
+      try {
+        const res = await fetch("/api/crop", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+
+        const out = await res.json();
+
+        if (!res.ok || out.error) {
+          throw new Error(out.error || "Error");
+        }
+
+        box.innerHTML = `<small>Recommended crop</small>
+          <div class="rbig"></div>
+          <div class="bar"><i></i></div>
+          <small></small>`;
+
+        box.querySelector(".rbig").textContent = out.crop;
+        box.querySelector(".bar i").style.width = out.confidence + "%";
+        box.querySelector("small:last-child").textContent =
+          out.confidence + "% confidence";
+
+      } catch (error) {
+        box.textContent = "❌ Could not get result. Check Flask server and model.";
+      }
+    }
+  </script>
+
+  <script src="{{ url_for('static', filename='lang.js') }}"></script>
+</body>
+</html>
